@@ -28,7 +28,8 @@ public class Run {
         MemberDto dto = new MemberDto();
         //dto.setUserId("a' or 1=1 or user_id = 'a");
         //dto.setPassword("ㅋㅋㅋㅋㅋㅋㅋ");
-        //dto.setPassword("1111");
+        dto.setUserId("super");
+        dto.setPassword("1111");
         System.out.println(dao.update(dto));
     }
     
