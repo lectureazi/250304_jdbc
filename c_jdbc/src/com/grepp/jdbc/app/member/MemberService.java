@@ -1,9 +1,12 @@
 package com.grepp.jdbc.app.member;
 
 import com.grepp.jdbc.app.member.dao.MemberDao;
+import com.grepp.jdbc.app.member.dao.MemberInfoDao;
 import com.grepp.jdbc.app.member.dto.MemberDto;
+import com.grepp.jdbc.app.member.dto.MemberInfoDto;
 import com.grepp.jdbc.infra.db.JdbcTemplate;
 import com.grepp.jdbc.infra.exception.DataAccessException;
+import com.grepp.jdbc.infra.exception.ValidException;
 import java.sql.Connection;
 import java.util.Optional;
 
@@ -12,18 +15,23 @@ import java.util.Optional;
 // DB의 transaction 관리 (commit/rollback)
 public class MemberService {
     
-    private JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
-    private MemberDao memberDao = new MemberDao();
+    private final JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
+    private final MemberDao memberDao = new MemberDao();
+    private final MemberInfoDao memberInfoDao = new MemberInfoDao();
     
-    public Optional<MemberDto> signup(MemberDto dto) {
-    
+    public MemberDto signup(MemberDto dto) {
+
         Connection conn = jdbcTemplate.getConnection();
         
         try{
-            Optional<MemberDao> member = memberDao.selectById(conn, dto.getUserId());
-            Optional<MemberDto> res = memberDao.insert(conn, dto);
+            memberDao.insert(conn, dto);
+            MemberInfoDto info = new MemberInfoDto();
+            
+            info.setUserId(dto.getUserId());
+            memberInfoDao.insert(conn, info);
+            
             jdbcTemplate.commit(conn);
-            return res;
+            return dto;
         }catch (DataAccessException e){
             jdbcTemplate.rollback(conn);
             throw e;

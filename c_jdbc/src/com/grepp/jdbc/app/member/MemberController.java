@@ -24,12 +24,6 @@ public class MemberController {
     
     public String signup(MemberDto memberDto) {
         validator.validate(memberDto);
-        Optional<MemberDto> res = memberService.signup(memberDto);
-        
-        if(res.isPresent()) {
-            return gson.toJson(res.get());
-        }else{
-            return "회원가입에 실패하였습니다.";
-        }
+        return gson.toJson(memberService.signup(memberDto));
     }
 }
