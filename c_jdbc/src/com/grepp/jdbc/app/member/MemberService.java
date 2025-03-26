@@ -19,9 +19,7 @@ public class MemberService {
     private final MemberInfoDao memberInfoDao = new MemberInfoDao();
     
     public MemberDto signup(MemberDto dto) {
-
         Connection conn = jdbcTemplate.getConnection();
-        
         try{
             memberDao.insert(conn, dto);
             MemberInfoDto info = new MemberInfoDto();
@@ -50,7 +48,6 @@ public class MemberService {
     
     
     public List<MemberDto> selectAll() {
-        
         Connection conn = jdbcTemplate.getConnection();
         try{
             return memberDao.selectAll(conn);
@@ -60,7 +57,36 @@ public class MemberService {
     }
     
     public MemberDto updatePassword(MemberDto dto) {
+        Connection conn = jdbcTemplate.getConnection();
+        try{
+            memberDao.updatePassword(conn, dto);
+            memberInfoDao.updateModifyDate(conn, dto.getUserId());
+            jdbcTemplate.commit(conn);
+            return dto;
+        }catch (DataAccessException e){
+            jdbcTemplate.rollback(conn);
+            throw e;
+        }finally {
+            jdbcTemplate.close(conn);
+        }
+    }
     
-        return null;
+    public MemberDto deleteById(String userId) {
+        Connection conn = jdbcTemplate.getConnection();
+        
+        try{
+            memberDao.delete(conn, userId);
+            memberInfoDao.updateLeaveDate(conn, userId);
+            jdbcTemplate.commit(conn);
+            MemberDto dto = new MemberDto();
+            dto.setUserId(userId);
+            dto.setLeave(true);
+            return dto;
+        }catch (DataAccessException e){
+            jdbcTemplate.rollback(conn);
+            throw e;
+        }finally {
+            jdbcTemplate.close(conn);
+        }
     }
 }

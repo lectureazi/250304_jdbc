@@ -5,6 +5,7 @@ import com.grepp.jdbc.infra.exception.DataAccessException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 public class MemberInfoDao {
     
@@ -23,6 +24,31 @@ public class MemberInfoDao {
             
             ps.executeUpdate();
             
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+    
+    public void updateModifyDate(Connection conn, String userId) {
+        
+        String sql = "update member_info set modify_date=? where user_id=?";
+        
+        try(PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setObject(1, LocalDateTime.now());
+            stmt.setString(2, userId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
+    
+    public void updateLeaveDate(Connection conn, String userId) {
+        String sql = "update member_info set leave_date=? where user_id=?";
+        
+        try(PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setObject(1, LocalDateTime.now());
+            stmt.setString(2, userId);
+            stmt.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException(e.getMessage(), e);
         }

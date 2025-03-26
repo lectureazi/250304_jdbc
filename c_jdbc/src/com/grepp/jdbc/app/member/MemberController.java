@@ -9,8 +9,10 @@ package com.grepp.jdbc.app.member;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.grepp.jdbc.app.member.dto.form.LeaveForm;
 import com.grepp.jdbc.app.member.dto.form.ModifyForm;
 import com.grepp.jdbc.app.member.dto.form.SignupForm;
+import com.grepp.jdbc.app.member.validator.LeaveFormValidator;
 import com.grepp.jdbc.app.member.validator.ModifyFormValidator;
 import com.grepp.jdbc.app.member.validator.SignupFormValidator;
 
@@ -21,6 +23,8 @@ public class MemberController {
     
     private final SignupFormValidator signupValidator = new SignupFormValidator();
     private final ModifyFormValidator modifyValidator = new ModifyFormValidator();
+    private final LeaveFormValidator leaveValidator = new LeaveFormValidator();
+    
     private final MemberService memberService = new MemberService();
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     
@@ -42,7 +46,13 @@ public class MemberController {
         form.setUserId(userId);
         form.setPassword(password);
         modifyValidator.validate(form);
-  
         return gson.toJson(memberService.updatePassword(form.toDto()));
+    }
+    
+    public String leave(String userId) {
+        LeaveForm form = new LeaveForm();
+        form.setUserId(userId);
+        leaveValidator.validate(form);
+        return gson.toJson(memberService.deleteById(userId));
     }
 }

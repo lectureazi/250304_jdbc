@@ -1,5 +1,8 @@
 package com.grepp.jdbc.view;
 
+import com.grepp.jdbc.app.member.auth.Principal;
+import com.grepp.jdbc.app.member.auth.SecurityContext;
+import com.grepp.jdbc.app.member.code.Grade;
 import com.grepp.jdbc.infra.exception.DataAccessException;
 import com.grepp.jdbc.infra.exception.ValidException;
 import com.grepp.jdbc.view.member.MemberMenu;
@@ -12,6 +15,22 @@ public class Index {
     
     public void menu() {
         while (true) {
+            
+            memberMenu.login();
+            Principal principal = SecurityContext.getInstance().getPrincipal();
+            
+            if(principal.grade().equals(Grade.ANONYMOUS)) {
+                System.out.println(" system : 아이디나 비밀번호를 확인하세요.");
+                continue;
+            }
+            
+            System.out.println(" system : 로그인에 성공했습니다.");
+            
+            if(!principal.grade().equals(Grade.ROLE_ADMIN)) {
+                System.out.println(" system : 관리자만 접근할 수 있는 페이지 입니다.");
+                continue;
+            }
+            
             try {
                 System.out.println("\n*** menu ***");
                 System.out.println(" * 1. 회원관리");

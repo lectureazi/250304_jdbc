@@ -2,15 +2,23 @@ package com.grepp.jdbc.view.member;
 
 import com.grepp.jdbc.app.member.MemberController;
 import com.grepp.jdbc.app.member.code.Grade;
-import com.grepp.jdbc.app.member.dto.MemberDto;
 import com.grepp.jdbc.app.member.dto.form.SignupForm;
 import java.util.Scanner;
 
 public class MemberMenu {
-    
-    
-    private MemberController memberController = new MemberController();
 
+    private MemberController memberController = new MemberController();
+    
+    public void login(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("\n*** login ***");
+        System.out.print(" * id : ");
+        String userId = sc.next();
+        
+        System.out.print(" * password : ");
+        String password = sc.next();
+    }
+    
     public void menu() {
         
         Scanner sc = new Scanner(System.in);
@@ -30,10 +38,12 @@ public class MemberMenu {
                 case 1:
                     System.out.println(memberController.signup(signUpForm(Grade.ROLE_USER)));
                     break;
+           
                 case 2:
                     System.out.print(" * 아이디 : ");
                     System.out.println(memberController.get(sc.next()));
                     break;
+          
                 case 3:
                     System.out.println(memberController.getAll());
                     break;
@@ -41,7 +51,7 @@ public class MemberMenu {
                 case 4:
                     System.out.println(memberController.signup(signUpForm(Grade.ROLE_ADMIN)));
                     break;
-                
+
                 case 5:
                     System.out.print(" * 아이디 : ");
                     String userId = sc.next();
@@ -54,6 +64,7 @@ public class MemberMenu {
                 
                 case 6:
                     System.out.print(" * 아이디 : ");
+                    System.out.println(memberController.leave(sc.next()));
                 
                 case 7:
                     return;
