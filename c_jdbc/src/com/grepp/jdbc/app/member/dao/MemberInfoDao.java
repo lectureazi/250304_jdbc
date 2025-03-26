@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class MemberInfoDao {
     
     public void insert(Connection conn, MemberInfoDto info) {
-        String sql = "insert33333 into member_info("
+        String sql = "insert into member_info("
                          + "user_id, reg_date, login_date, modify_date, leave_date, rentable_date) "
                          + "values(?,?,?,?,?,?)";
         

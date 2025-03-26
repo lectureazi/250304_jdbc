@@ -6,9 +6,8 @@ import com.grepp.jdbc.app.member.dto.MemberDto;
 import com.grepp.jdbc.app.member.dto.MemberInfoDto;
 import com.grepp.jdbc.infra.db.JdbcTemplate;
 import com.grepp.jdbc.infra.exception.DataAccessException;
-import com.grepp.jdbc.infra.exception.ValidException;
 import java.sql.Connection;
-import java.util.Optional;
+import java.util.List;
 
 // Note 02 Service
 // 비지니스로직을 구현
@@ -38,5 +37,30 @@ public class MemberService {
         }finally {
             jdbcTemplate.close(conn);
         }
+    }
+    
+    public MemberDto selectById(String userId) {
+        Connection conn = jdbcTemplate.getConnection();
+        try{
+            return memberDao.selectById(conn, userId).orElse(null);
+        } finally {
+            jdbcTemplate.close(conn);
+        }
+    }
+    
+    
+    public List<MemberDto> selectAll() {
+        
+        Connection conn = jdbcTemplate.getConnection();
+        try{
+            return memberDao.selectAll(conn);
+        }finally {
+            jdbcTemplate.close(conn);
+        }
+    }
+    
+    public MemberDto updatePassword(MemberDto dto) {
+    
+        return null;
     }
 }

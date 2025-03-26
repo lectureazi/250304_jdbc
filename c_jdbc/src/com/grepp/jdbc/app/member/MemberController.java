@@ -9,21 +9,40 @@ package com.grepp.jdbc.app.member;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.grepp.jdbc.app.member.dto.MemberDto;
-import com.grepp.jdbc.app.member.validator.MemberValidator;
-import java.util.Optional;
+import com.grepp.jdbc.app.member.dto.form.ModifyForm;
+import com.grepp.jdbc.app.member.dto.form.SignupForm;
+import com.grepp.jdbc.app.member.validator.ModifyFormValidator;
+import com.grepp.jdbc.app.member.validator.SignupFormValidator;
 
 // 1. 사용자의 입력값을 어플리케이션 내에서 사용하기 적합한 형태로 파싱
 // 2. 요청에 대해 인가 처리를 하는 외벽역할
 // 3. Client 에게 비지니스로직의 결과물을 어떤 형태(text/html, json) 로 보여줄 것인지 선택
 public class MemberController {
     
-    private final MemberValidator validator = new MemberValidator();
+    private final SignupFormValidator signupValidator = new SignupFormValidator();
+    private final ModifyFormValidator modifyValidator = new ModifyFormValidator();
     private final MemberService memberService = new MemberService();
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
     
-    public String signup(MemberDto memberDto) {
-        validator.validate(memberDto);
-        return gson.toJson(memberService.signup(memberDto));
+    public String signup(SignupForm form) {
+        signupValidator.validate(form);
+        return gson.toJson(memberService.signup(form.toDto()));
+    }
+    
+    public String get(String userId) {
+        return gson.toJson(memberService.selectById(userId));
+    }
+    
+    public String getAll() {
+        return gson.toJson(memberService.selectAll());
+    }
+    
+    public String modifyPassword(String userId, String password) {
+        ModifyForm form = new ModifyForm();
+        form.setUserId(userId);
+        form.setPassword(password);
+        modifyValidator.validate(form);
+  
+        return gson.toJson(memberService.updatePassword(form.toDto()));
     }
 }
