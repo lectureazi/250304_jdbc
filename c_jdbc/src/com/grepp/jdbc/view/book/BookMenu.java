@@ -1,7 +1,7 @@
 package com.grepp.jdbc.view.book;
 
 import com.grepp.jdbc.app.book.BookController;
-import com.grepp.jdbc.app.book.form.RegistForm;
+import com.grepp.jdbc.app.book.dto.form.RegistForm;
 import java.util.Scanner;
 
 public class BookMenu {

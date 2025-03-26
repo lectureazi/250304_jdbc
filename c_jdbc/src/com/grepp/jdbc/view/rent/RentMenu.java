@@ -40,11 +40,11 @@ public class RentMenu {
                         System.out.print(" * user_id : ");
                         String userId = sc.next();
                         
-                        String books = bookController.findAllBooks();
+                        System.out.println(bookController.findAllBooks());
                         List<String> bkIdxs = new ArrayList<>();
                         
                         while (true) {
-                            System.out.println(books);
+                            //System.out.println(books);
                             
                             System.out.print(" * 도서번호(bkIdx) : ");
                             bkIdxs.add(sc.next());

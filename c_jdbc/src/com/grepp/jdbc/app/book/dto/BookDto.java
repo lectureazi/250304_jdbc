@@ -1,23 +1,37 @@
-package com.grepp.jdbc.app.book.form;
+package com.grepp.jdbc.app.book.dto;
 
-public class RegistForm {
+import java.time.LocalDateTime;
+
+public class BookDto {
+
+    private Integer bkIdx;
     private String isbn;
-    private String category;
     private String title;
     private String author;
     private String info;
     private String amount;
-    
+    private Integer rentCnt;
+    private LocalDateTime regDate;
     @Override
     public String toString() {
-        return "RegistForm{" +
-                   "isbn='" + isbn + '\'' +
-                   ", category='" + category + '\'' +
+        return "BookDto{" +
+                   "bkIdx=" + bkIdx +
+                   ", isbn='" + isbn + '\'' +
                    ", title='" + title + '\'' +
                    ", author='" + author + '\'' +
                    ", info='" + info + '\'' +
                    ", amount='" + amount + '\'' +
+                   ", regDate=" + regDate +
+                   ", rentCnt=" + rentCnt +
                    '}';
+    }
+    
+    public Integer getBkIdx() {
+        return bkIdx;
+    }
+    
+    public void setBkIdx(Integer bkIdx) {
+        this.bkIdx = bkIdx;
     }
     
     public String getIsbn() {
@@ -26,14 +40,6 @@ public class RegistForm {
     
     public void setIsbn(String isbn) {
         this.isbn = isbn;
-    }
-    
-    public String getCategory() {
-        return category;
-    }
-    
-    public void setCategory(String category) {
-        this.category = category;
     }
     
     public String getTitle() {
@@ -66,5 +72,21 @@ public class RegistForm {
     
     public void setAmount(String amount) {
         this.amount = amount;
+    }
+    
+    public LocalDateTime getRegDate() {
+        return regDate;
+    }
+    
+    public void setRegDate(LocalDateTime regDate) {
+        this.regDate = regDate;
+    }
+    
+    public Integer getRentCnt() {
+        return rentCnt;
+    }
+    
+    public void setRentCnt(Integer rentCnt) {
+        this.rentCnt = rentCnt;
     }
 }

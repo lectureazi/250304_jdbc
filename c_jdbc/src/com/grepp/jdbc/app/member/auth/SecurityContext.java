@@ -2,7 +2,7 @@ package com.grepp.jdbc.app.member.auth;
 
 public class SecurityContext {
     
-    private Principal principal;
+    private Principal principal = Principal.ANONYMOUS;
     private static SecurityContext instance;
     
     public static SecurityContext getInstance() {
