@@ -1,5 +1,7 @@
 package com.grepp.jdbc.app.member;
 
+import com.grepp.jdbc.app.member.auth.Principal;
+import com.grepp.jdbc.app.member.auth.SecurityContext;
 import com.grepp.jdbc.app.member.dao.MemberDao;
 import com.grepp.jdbc.app.member.dao.MemberInfoDao;
 import com.grepp.jdbc.app.member.dto.MemberDto;
@@ -7,7 +9,9 @@ import com.grepp.jdbc.app.member.dto.MemberInfoDto;
 import com.grepp.jdbc.infra.db.JdbcTemplate;
 import com.grepp.jdbc.infra.exception.DataAccessException;
 import java.sql.Connection;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 // Note 02 Service
 // 비지니스로직을 구현
@@ -85,6 +89,26 @@ public class MemberService {
         }catch (DataAccessException e){
             jdbcTemplate.rollback(conn);
             throw e;
+        }finally {
+            jdbcTemplate.close(conn);
+        }
+    }
+    
+    public void authenticate(String userId, String password) {
+        Connection conn = jdbcTemplate.getConnection();
+        
+        SecurityContext securityContext = SecurityContext.getInstance();
+        
+        try{
+            Optional<MemberDto> member = memberDao.selectByIdAndPassword(conn, userId, password);
+            
+            if(member.isPresent()){
+                MemberDto dto = member.get();
+                Principal principal = new Principal(dto.getUserId(), dto.getGrade(), LocalDateTime.now());
+                securityContext.setPrincipal(principal);
+                return;
+            }
+            securityContext.setPrincipal(Principal.ANONYMOUS);
         }finally {
             jdbcTemplate.close(conn);
         }

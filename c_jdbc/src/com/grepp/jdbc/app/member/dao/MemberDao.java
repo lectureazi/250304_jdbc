@@ -2,7 +2,6 @@ package com.grepp.jdbc.app.member.dao;
 
 import com.grepp.jdbc.app.member.code.Grade;
 import com.grepp.jdbc.app.member.dto.MemberDto;
-import com.grepp.jdbc.app.member.dto.form.SignupForm;
 import com.grepp.jdbc.infra.db.JdbcTemplate;
 import com.grepp.jdbc.infra.exception.DataAccessException;
 import java.sql.Connection;
@@ -43,11 +42,10 @@ public class MemberDao {
         }
     }
     
-    public Optional<MemberDto> selectByIdAndPassword(String id, String password){
+    public Optional<MemberDto> selectByIdAndPassword(Connection conn, String id, String password){
         String sql = "select * from member where user_id = ? and password = ?";
         
         try(
-            Connection conn = jdbcTemplate.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
         ) {
             MemberDto res = null;

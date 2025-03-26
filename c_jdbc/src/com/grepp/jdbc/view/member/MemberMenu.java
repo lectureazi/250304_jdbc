@@ -17,6 +17,8 @@ public class MemberMenu {
         
         System.out.print(" * password : ");
         String password = sc.next();
+        
+        memberController.login(userId, password);
     }
     
     public void menu() {

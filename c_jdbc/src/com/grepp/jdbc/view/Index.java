@@ -28,7 +28,7 @@ public class Index {
             
             if(!principal.grade().equals(Grade.ROLE_ADMIN)) {
                 System.out.println(" system : 관리자만 접근할 수 있는 페이지 입니다.");
-                continue;
+                return;
             }
             
             try {
