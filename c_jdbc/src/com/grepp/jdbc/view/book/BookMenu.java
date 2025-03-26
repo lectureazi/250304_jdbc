@@ -26,8 +26,8 @@ public class BookMenu {
                     break;
                 // todo : 도서 등록 후 등록한 도서의 정보를 출력합니다.
                 // 도서명, isbn, 작가, 카테고리는 공백일 수 없습니다.
-                // 카테고리는 NOVEL, POEM, HUMANITY 가 존재합니다.
                 // 도서재고는 0보다 작을 수 없습니다.
+                // 카테고리는 NOVEL, POEM, HUMANITY 가 존재합니다.
                 case 2:
                     System.out.println(bookController.registBook(bookForm()));
                     break;

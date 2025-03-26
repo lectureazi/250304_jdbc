@@ -16,7 +16,7 @@ public class BookController {
         return null;
     }
     
-    public boolean deleteBook(String bkIdx) {
-        return false;
+    public String deleteBook(String bkIdx) {
+        return null;
     }
 }
