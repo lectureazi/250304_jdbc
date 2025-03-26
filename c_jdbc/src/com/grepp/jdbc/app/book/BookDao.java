@@ -31,6 +31,5 @@ public class BookDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        
     }
 }
