@@ -7,6 +7,7 @@ import com.grepp.jdbc.infra.exception.DataAccessException;
 import com.grepp.jdbc.infra.exception.ValidException;
 import com.grepp.jdbc.view.book.BookMenu;
 import com.grepp.jdbc.view.member.MemberMenu;
+import com.grepp.jdbc.view.rent.RentMenu;
 import java.util.Scanner;
 
 public class Index {
@@ -14,25 +15,27 @@ public class Index {
     private final Scanner sc = new Scanner(System.in);
     private final MemberMenu memberMenu = new MemberMenu();
     private final BookMenu bookMenu = new BookMenu();
+    private final RentMenu rentMenu = new RentMenu();
+    
     public void menu() {
         
         while (true) {
-            Principal principal = SecurityContext.getInstance().getPrincipal();
-            
-            if (principal.grade().equals(Grade.ANONYMOUS)) {
-                memberMenu.login();
-                principal = SecurityContext.getInstance().getPrincipal();
-            }
-            
-            if(principal.grade().equals(Grade.ANONYMOUS)) {
-                System.out.println(" system : 아이디나 비밀번호를 확인하세요.");
-                continue;
-            }
-            
-            if(!principal.grade().equals(Grade.ROLE_ADMIN)) {
-                System.out.println(" system : 관리자만 접근할 수 있는 페이지 입니다.");
-                return;
-            }
+//            Principal principal = SecurityContext.getInstance().getPrincipal();
+//
+//            if (principal.grade().equals(Grade.ANONYMOUS)) {
+//                memberMenu.login();
+//                principal = SecurityContext.getInstance().getPrincipal();
+//            }
+//
+//            if (principal.grade().equals(Grade.ANONYMOUS)) {
+//                System.out.println(" system : 아이디나 비밀번호를 확인하세요.");
+//                continue;
+//            }
+//
+//            if (!principal.grade().equals(Grade.ROLE_ADMIN)) {
+//                System.out.println(" system : 관리자만 접근할 수 있는 페이지 입니다.");
+//                return;
+//            }
             
             try {
                 System.out.println("\n*** menu ***");
@@ -50,6 +53,7 @@ public class Index {
                         bookMenu.menu();
                         break;
                     case 3:
+                        rentMenu.menu();
                         break;
                     case 4:
                         return;
@@ -59,7 +63,7 @@ public class Index {
                 
             } catch (DataAccessException e) {
                 e.printStackTrace();
-            } catch(ValidException e){
+            } catch (ValidException e) {
                 System.out.println(" system : " + e.getMessage());
             }
         }

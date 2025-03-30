@@ -1,6 +1,5 @@
 package com.grepp.jdbc.app.member;
 
-
 // NOTE 01 MVC
 // MVC : Model(Service, Dao), Controller, View 로 소프트웨어 구조를 구성하는 패턴
 // Controller (Presentation Layer)
@@ -8,7 +7,6 @@ package com.grepp.jdbc.app.member;
 // 핵심로직인 Model이 외부에 종속되지 않도록 분리하기 위해 Client와 직접 상호작용하는 Presentation Layer
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.grepp.jdbc.app.member.dto.form.LeaveForm;
 import com.grepp.jdbc.app.member.dto.form.ModifyForm;
 import com.grepp.jdbc.app.member.dto.form.SignupForm;
@@ -23,12 +21,19 @@ import java.util.Map;
 // 3. Client 에게 비지니스로직의 결과물을 어떤 형태(text/html, json) 로 보여줄 것인지 선택
 public class MemberController {
     
+    private static final MemberController instance = new MemberController();
     private final SignupFormValidator signupValidator = new SignupFormValidator();
     private final ModifyFormValidator modifyValidator = new ModifyFormValidator();
     private final LeaveFormValidator leaveValidator = new LeaveFormValidator();
-    
-    private final MemberService memberService = new MemberService();
+    private final MemberService memberService = MemberService.getInstance();
     private final Gson gson = GsonProvider.get();
+    
+    private MemberController() {
+    }
+
+    public static MemberController getInstance() {
+        return instance;
+    }
     
     public String signup(SignupForm form) {
         signupValidator.validate(form);

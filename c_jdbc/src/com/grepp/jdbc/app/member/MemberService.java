@@ -18,13 +18,20 @@ import java.util.Optional;
 // DB의 transaction 관리 (commit/rollback)
 public class MemberService {
     
+    private static final MemberService instance = new MemberService();
     private final JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
-    private final MemberDao memberDao = new MemberDao();
-    private final MemberInfoDao memberInfoDao = new MemberInfoDao();
+    private final MemberDao memberDao = MemberDao.getInstance();
+    private final MemberInfoDao memberInfoDao = MemberInfoDao.getInstance();
+    private MemberService() {
+    }
+
+    public static MemberService getInstance() {
+        return instance;
+    }
     
     public MemberDto signup(MemberDto dto) {
         Connection conn = jdbcTemplate.getConnection();
-        try{
+        try {
             memberDao.insert(conn, dto);
             MemberInfoDto info = new MemberInfoDto();
             
@@ -33,17 +40,17 @@ public class MemberService {
             
             jdbcTemplate.commit(conn);
             return dto;
-        }catch (DataAccessException e){
+        } catch (DataAccessException e) {
             jdbcTemplate.rollback(conn);
             throw e;
-        }finally {
+        } finally {
             jdbcTemplate.close(conn);
         }
     }
     
     public MemberDto selectById(String userId) {
         Connection conn = jdbcTemplate.getConnection();
-        try{
+        try {
             return memberDao.selectById(conn, userId).orElse(null);
         } finally {
             jdbcTemplate.close(conn);
@@ -53,24 +60,24 @@ public class MemberService {
     
     public List<MemberDto> selectAll() {
         Connection conn = jdbcTemplate.getConnection();
-        try{
+        try {
             return memberDao.selectAll(conn);
-        }finally {
+        } finally {
             jdbcTemplate.close(conn);
         }
     }
     
     public MemberDto updatePassword(MemberDto dto) {
         Connection conn = jdbcTemplate.getConnection();
-        try{
+        try {
             memberDao.updatePassword(conn, dto);
             memberInfoDao.updateModifyDate(conn, dto.getUserId());
             jdbcTemplate.commit(conn);
             return dto;
-        }catch (DataAccessException e){
+        } catch (DataAccessException e) {
             jdbcTemplate.rollback(conn);
             throw e;
-        }finally {
+        } finally {
             jdbcTemplate.close(conn);
         }
     }
@@ -78,7 +85,7 @@ public class MemberService {
     public MemberDto deleteById(String userId) {
         Connection conn = jdbcTemplate.getConnection();
         
-        try{
+        try {
             memberDao.delete(conn, userId);
             memberInfoDao.updateLeaveDate(conn, userId);
             jdbcTemplate.commit(conn);
@@ -86,10 +93,10 @@ public class MemberService {
             dto.setUserId(userId);
             dto.setLeave(true);
             return dto;
-        }catch (DataAccessException e){
+        } catch (DataAccessException e) {
             jdbcTemplate.rollback(conn);
             throw e;
-        }finally {
+        } finally {
             jdbcTemplate.close(conn);
         }
     }
@@ -99,17 +106,18 @@ public class MemberService {
         
         SecurityContext securityContext = SecurityContext.getInstance();
         
-        try{
+        try {
             Optional<MemberDto> member = memberDao.selectByIdAndPassword(conn, userId, password);
             
-            if(member.isPresent()){
+            if (member.isPresent()) {
                 MemberDto dto = member.get();
-                Principal principal = new Principal(dto.getUserId(), dto.getGrade(), LocalDateTime.now());
+                Principal principal = new Principal(dto.getUserId(), dto.getGrade(),
+                    LocalDateTime.now());
                 securityContext.setPrincipal(principal);
                 return;
             }
             securityContext.setPrincipal(Principal.ANONYMOUS);
-        }finally {
+        } finally {
             jdbcTemplate.close(conn);
         }
     }

@@ -12,24 +12,25 @@ import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class GsonProvider {
     
     private static final Gson gson;
     
-    static{
+    static {
         gson = new GsonBuilder()
-            .registerTypeAdapter(LocalDateTime.class, new DateTimeConverter())
-            .registerTypeAdapter(LocalDate.class, new DateConverter())
-            .setPrettyPrinting().create();
+                   .registerTypeAdapter(LocalDateTime.class, new DateTimeConverter())
+                   .registerTypeAdapter(LocalDate.class, new DateConverter())
+                   .setPrettyPrinting().create();
     }
     
-    public static Gson get(){
+    public static Gson get() {
         return gson;
     }
     
-    private static class DateTimeConverter implements JsonSerializer<LocalDateTime>, JsonDeserializer<LocalDateTime> {
+    private static class DateTimeConverter implements JsonSerializer<LocalDateTime>,
+                                                          JsonDeserializer<LocalDateTime> {
+        
         @Override
         public JsonElement serialize(LocalDateTime dateTime, Type type,
             JsonSerializationContext jsonSerializationContext) {
@@ -39,11 +40,13 @@ public class GsonProvider {
         @Override
         public LocalDateTime deserialize(JsonElement jsonElement, Type type,
             JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-            return LocalDateTime.parse(jsonElement.getAsString(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
+            return LocalDateTime.parse(jsonElement.getAsString());
         }
     }
     
-    private static class DateConverter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
+    private static class DateConverter implements JsonSerializer<LocalDate>,
+                                                      JsonDeserializer<LocalDate> {
+        
         @Override
         public JsonElement serialize(LocalDate date, Type type,
             JsonSerializationContext jsonSerializationContext) {
@@ -53,7 +56,7 @@ public class GsonProvider {
         @Override
         public LocalDate deserialize(JsonElement jsonElement, Type type,
             JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-            return LocalDate.parse(jsonElement.getAsString(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            return LocalDate.parse(jsonElement.getAsString());
         }
     }
 }

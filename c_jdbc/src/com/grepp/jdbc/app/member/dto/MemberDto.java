@@ -4,7 +4,7 @@ import com.grepp.jdbc.app.member.code.Grade;
 import java.util.Objects;
 
 public class MemberDto {
-
+    
     private String userId;
     private String password;
     private String email;

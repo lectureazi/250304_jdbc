@@ -8,7 +8,7 @@ public record Principal(
     Grade grade,
     LocalDateTime loginTime
 ) {
-
+    
     public static final Principal ANONYMOUS = new Principal(
         "anonymous", Grade.ANONYMOUS, LocalDateTime.now()
     );

@@ -19,16 +19,24 @@ import java.util.Optional;
 // 필요한 데이터 또는 데이터의 변경사항을 DB에 반영
 // DB로 부터 읽어온 데이터를 domain layer 에서 사용하기 적합한 형태로 parsing
 public class MemberDao {
-
+    
+    private static final MemberDao instance = new MemberDao();
     private final JdbcTemplate jdbcTemplate = JdbcTemplate.getInstance();
     
-    public Optional<MemberDto> insert(Connection conn, MemberDto dto){
+    private MemberDao() {
+    }
+    
+    public static MemberDao getInstance() {
+        return instance;
+    }
+    
+    public Optional<MemberDto> insert(Connection conn, MemberDto dto) {
         
         String sql = "insert into member(user_id, password, email, grade, tell) "
                          + "values(?,?,?,?,?)";
         
-        try( PreparedStatement stmt = conn.prepareStatement(sql);) {
-           
+        try (PreparedStatement stmt = conn.prepareStatement(sql);) {
+            
             stmt.setString(1, dto.getUserId());
             stmt.setString(2, dto.getPassword());
             stmt.setString(3, dto.getEmail());
@@ -42,18 +50,18 @@ public class MemberDao {
         }
     }
     
-    public Optional<MemberDto> selectByIdAndPassword(Connection conn, String id, String password){
+    public Optional<MemberDto> selectByIdAndPassword(Connection conn, String id, String password) {
         String sql = "select * from member where user_id = ? and password = ?";
         
-        try(
+        try (
             PreparedStatement stmt = conn.prepareStatement(sql);
         ) {
             MemberDto res = null;
             stmt.setString(1, id);
             stmt.setString(2, password);
             
-            try(ResultSet rset = stmt.executeQuery()) {
-                while(rset.next()) {
+            try (ResultSet rset = stmt.executeQuery()) {
+                while (rset.next()) {
                     res = generateMemberDto(rset);
                 }
                 
@@ -65,10 +73,10 @@ public class MemberDao {
         }
     }
     
-    public Optional<MemberDto> update(MemberDto dto){
+    public Optional<MemberDto> update(MemberDto dto) {
         String sql = "update member set password = ? where user_id = ?";
         
-        try(
+        try (
             Connection conn = jdbcTemplate.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
         ) {
@@ -82,9 +90,9 @@ public class MemberDao {
         }
     }
     
-    public boolean delete(Connection conn, String userId){
+    public boolean delete(Connection conn, String userId) {
         String sql = "delete from member where user_id = ?";
-        try(
+        try (
             PreparedStatement stmt = conn.prepareStatement(sql);
         ) {
             stmt.setString(1, userId);
@@ -98,13 +106,13 @@ public class MemberDao {
     public Optional<MemberDto> selectById(Connection conn, String userId) {
         String sql = "select * from member where user_id = ?";
         MemberDto res = null;
-        try(
+        try (
             PreparedStatement stmt = conn.prepareStatement(sql);
         ) {
             stmt.setString(1, userId);
-            try(ResultSet rset = stmt.executeQuery()){
+            try (ResultSet rset = stmt.executeQuery()) {
                 
-                while(rset.next()) {
+                while (rset.next()) {
                     res = generateMemberDto(rset);
                 }
                 
@@ -130,9 +138,9 @@ public class MemberDao {
         String sql = "select * from member";
         List<MemberDto> members = new ArrayList<>();
         
-        try(PreparedStatement stmt = conn.prepareStatement(sql)){
-            try(ResultSet rset = stmt.executeQuery()) {
-                while(rset.next()){
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            try (ResultSet rset = stmt.executeQuery()) {
+                while (rset.next()) {
                     members.add(generateMemberDto(rset));
                 }
                 
@@ -145,11 +153,11 @@ public class MemberDao {
     
     public void updatePassword(Connection conn, MemberDto dto) {
         String sql = "update member set password = ? where user_id = ?";
-        try(PreparedStatement stmt = conn.prepareStatement(sql)){
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, dto.getPassword());
             stmt.setString(2, dto.getUserId());
             stmt.executeUpdate();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             throw new DataAccessException(e.getMessage(), e);
         }
     }

@@ -4,14 +4,14 @@ import com.grepp.jdbc.app.member.code.Grade;
 import com.grepp.jdbc.app.member.dto.MemberDto;
 
 public class SignupForm {
-
+    
     private String userId;
     private String password;
     private String email;
     private Grade grade;
     private String tell;
     
-    public MemberDto toDto(){
+    public MemberDto toDto() {
         MemberDto memberDto = new MemberDto();
         memberDto.setUserId(userId);
         memberDto.setPassword(password);

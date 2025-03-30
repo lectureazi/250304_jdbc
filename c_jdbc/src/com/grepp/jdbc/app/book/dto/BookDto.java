@@ -1,17 +1,20 @@
 package com.grepp.jdbc.app.book.dto;
 
+import com.grepp.jdbc.app.book.code.Category;
 import java.time.LocalDateTime;
 
 public class BookDto {
-
+    
     private Integer bkIdx;
     private String isbn;
     private String title;
     private String author;
     private String info;
-    private String amount;
+    private Integer amount;
     private Integer rentCnt;
+    private Category category;
     private LocalDateTime regDate;
+    
     @Override
     public String toString() {
         return "BookDto{" +
@@ -21,8 +24,9 @@ public class BookDto {
                    ", author='" + author + '\'' +
                    ", info='" + info + '\'' +
                    ", amount='" + amount + '\'' +
-                   ", regDate=" + regDate +
                    ", rentCnt=" + rentCnt +
+                   ", category=" + category +
+                   ", regDate=" + regDate +
                    '}';
     }
     
@@ -66,20 +70,12 @@ public class BookDto {
         this.info = info;
     }
     
-    public String getAmount() {
+    public Integer getAmount() {
         return amount;
     }
     
-    public void setAmount(String amount) {
+    public void setAmount(Integer amount) {
         this.amount = amount;
-    }
-    
-    public LocalDateTime getRegDate() {
-        return regDate;
-    }
-    
-    public void setRegDate(LocalDateTime regDate) {
-        this.regDate = regDate;
     }
     
     public Integer getRentCnt() {
@@ -88,5 +84,21 @@ public class BookDto {
     
     public void setRentCnt(Integer rentCnt) {
         this.rentCnt = rentCnt;
+    }
+    
+    public Category getCategory() {
+        return category;
+    }
+    
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+    
+    public LocalDateTime getRegDate() {
+        return regDate;
+    }
+    
+    public void setRegDate(LocalDateTime regDate) {
+        this.regDate = regDate;
     }
 }

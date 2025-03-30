@@ -1,6 +1,6 @@
 package com.grepp.jdbc.infra.exception;
 
-public class DataAccessException extends CommonException{
+public class DataAccessException extends CommonException {
     
     public DataAccessException(String message) {
         super(message);

@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class BookMenu {
     
-    private final BookController bookController = new BookController();
+    private final BookController bookController = BookController.getInstance();
     
     public void menu() {
         Scanner sc = new Scanner(System.in);
@@ -22,7 +22,8 @@ public class BookMenu {
             
             switch (sc.nextInt()) {
                 // todo : 모든 도서 정보를 출력합니다.
-                case 1: System.out.println(bookController.findAllBooks());
+                case 1:
+                    System.out.println(bookController.getAll());
                     break;
                 // todo : 도서 등록 후 등록한 도서의 정보를 출력합니다.
                 // 도서명, isbn, 작가, 카테고리는 공백일 수 없습니다.
@@ -35,9 +36,9 @@ public class BookMenu {
                 case 3:
                     System.out.print(" * 도서번호(bkIdx) : ");
                     String bkIdx = sc.next();
-                    System.out.println(" * 도서 소개 : ");
-                    String info = sc.nextLine();
+                    System.out.print(" * 도서 소개 : ");
                     sc.nextLine();
+                    String info = sc.nextLine();
                     System.out.println(bookController.modifyBookInfo(bkIdx, info));
                     break;
                 // todo : 도서 삭제 후 삭제 성공여부를 출력합니다.
@@ -45,7 +46,7 @@ public class BookMenu {
                     System.out.print(" * 도서번호(bkIdx) : ");
                     System.out.println(bookController.deleteBook(sc.next()));
                     break;
-                    
+                
                 case 5:
                     return;
                 
@@ -58,6 +59,19 @@ public class BookMenu {
     
     private RegistForm bookForm() {
         Scanner sc = new Scanner(System.in);
-        return null;
+        RegistForm form = new RegistForm();
+        System.out.print("isbn : ");
+        form.setIsbn(sc.next());
+        System.out.print("category : ");
+        form.setCategory(sc.next());
+        System.out.print("title : ");
+        form.setTitle(sc.next());
+        System.out.print("author : ");
+        form.setAuthor(sc.next());
+        System.out.print("info : ");
+        form.setInfo(sc.next());
+        System.out.print("amount : ");
+        form.setAmount(sc.next());
+        return form;
     }
 }
